@@ -1,0 +1,38 @@
+body {
+    margin: 20px;
+    overflow-x: hidden;
+}
+
+.navbar {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    background-color: #5071C7;
+    width: 100%;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .href {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.72);
+    font-size: 20px;
+    padding-right: 8px;
+    margin-right: 60px;
+}
+
+.header {
+    margin: 120px;
+    margin-top: 200px;
+}
+
+.info {
+    font-weight: bold;
+}
+
+.header li {
+    font-size: 20px;
+    margin-top: 8px;
+}

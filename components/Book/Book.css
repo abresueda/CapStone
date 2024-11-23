@@ -1,0 +1,72 @@
+.navbar {
+    display: flex;
+    justify-content:flex-end;
+    gap: 40px;
+    align-items: center;
+    background-color: #5071C7;
+    width: 100%;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.bookPage {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 100px;
+}
+
+.bookAdd {
+    display: flex;
+    flex-direction: row;
+    gap: 80px;
+    margin-bottom: 30px;
+    text-align: center;
+    justify-content: center;
+}
+
+.inputField {
+    padding: 8px;
+    margin: 10px 0;
+    width: 300px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.submitBtn {
+    padding: 10px 20px;
+    background-color: #5071C7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submitBtn:hover {
+    background-color: #5071C7;
+}
+
+.bookList {
+    text-align: center;
+}
+
+.bookList h2 {
+    font-size: 32px;
+}
+
+.bookItem {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.bookButtons button {
+    margin: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.bookButtons button:hover {
+    background-color: #5071C7;
+}
