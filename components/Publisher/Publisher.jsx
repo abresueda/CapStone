@@ -24,7 +24,7 @@ function Publisher() {
     //GET
     useEffect(() => {
         axios
-        .get("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/publishers")
+        .get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers")
         .then((res) => {
         setPublishers(res.data);
         setLoading(false);
@@ -54,7 +54,7 @@ function Publisher() {
             return;
         }
 
-        axios.post("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/publishers", newPublishers)
+        axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers", newPublishers)
         .then((res) =>
         {
             setUpdate(false);
@@ -89,7 +89,7 @@ function Publisher() {
 
     //DELETE
     const handleDeletePublishers=(e)=> {
-        axios.delete("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/publishers/" + e.target.id)
+        axios.delete("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers/" + e.target.id)
         .then((res)=> 
         {
             setUpdate(false);
@@ -120,7 +120,7 @@ function Publisher() {
         }
 
         axios
-        .put("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/publishers/" + updatePublishers.id, updatePublishers)
+        .put("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers/" + updatePublishers.id, updatePublishers)
         .then(()=> {
             setUpdate(false);
             setUpdatePublishers({

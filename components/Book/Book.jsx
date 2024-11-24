@@ -35,7 +35,7 @@ function Books() {
 
     //Author listesini getirmek için.
     useEffect(() => {
-        axios.get("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/authors")
+        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/authors")
         .then((res) => {
             setAuthors(res.data);
         })
@@ -57,7 +57,7 @@ function Books() {
 
     //Publisher listesini getirmek için.
     useEffect(() => {
-        axios.get("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/publishers")
+        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers")
         .then((res) => {
             setPublishers(res.data);
         })
@@ -78,7 +78,7 @@ function Books() {
 
     //Category listesini getirmek için.
     useEffect(() => {
-        axios.get("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/categories")
+        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/categories")
         .then((res) => {
             setCategories(res.data);
         })
@@ -94,7 +94,7 @@ function Books() {
         const selectedCategories = categories.filter((category) =>
             selectedCategoryIds.includes(String(category.id))
         );
-    
+
         setNewBook((prevState) => ({
             ...prevState,
             categories: selectedCategories, // Kategori objelerini ekliyoruz
@@ -103,7 +103,7 @@ function Books() {
     
     //GET
     useEffect(() => {
-        axios.get("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/books")
+        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books")
         .then((res) => {
             setBooks(res.data);
             setLoading(false);
@@ -131,16 +131,10 @@ function Books() {
     //ADD BOOK
     //Formdaki veriler tamamlandığında ve gönderilmek istendiğinde çalışır.
     const handleAddBook = () => {
-        if (!newBook.name || !newBook.publicationYear || !newBook.stock || !newBook.author || !newBook.publisher) {
+        if (!newBook.name || !newBook.publicationYear || !newBook.stock || !newBook.author.id || !newBook.publisher.id) {
             toast.error("All fields are required!");
             return;
         }
-
-        // Kategori kontrolü
-        if (!newBook.categories || !Array.isArray(newBook.categories) || newBook.categories.length === 0) {
-        toast.error("At least one category must be selected!");
-        return;
-    }
 
         //publicationYear'ın formatını kontrol etmek için.
         const yearRegex = /^\d{4}$/;
@@ -156,7 +150,7 @@ function Books() {
         return;
         }
 
-       axios.post("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/books", newBook)
+       axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books", newBook)
         .then((res) => {
             setUpdate(false);
             setNewBook({
@@ -176,7 +170,7 @@ function Books() {
 
     //DELETE
     const handleDeleteBook=(e) => {
-        axios.delete("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/books/" + e.target.id)
+        axios.delete("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books/" + e.target.id)
         .then((res) => 
         {
             setUpdate(false);
@@ -200,6 +194,7 @@ function Books() {
     //PUT
     //Edite basılınca mevcut yazar bilgilerini doldurur.
     const handleUpdateBookBtn=(book)=> {
+        console.log('book:', book); 
         setUpdateBook({
             ...book,
             author: book.author || {},
@@ -209,32 +204,42 @@ function Books() {
     }
 
     const handleUpdateBook=()=> {
-        if (!updateBook.name || !updateBook.publicationYear || !updateBook.stock || !updateBook.author || !updateBook.publisher || !updateBook.categories || updateBook.categories.length === 0) {
+        console.log("handleUpdateBook called");
+
+        // Verileri dönüştürme: publicationYear ve stock'u doğru tipe çeviriyoruz
+    const updatedBook = {
+        ...updateBook,
+        publicationYear: parseInt(updateBook.publicationYear, 10),  // publicationYear'ı sayıya çeviriyoruz
+        stock: parseInt(updateBook.stock, 10),  // stock'u sayıya çeviriyoruz
+    };
+
+        if (!updatedBook.name || !updatedBook.publicationYear || !updatedBook.stock || !updatedBook.author.id || !updatedBook.publisher.id ) {
             toast.error("All fields are required!");
             return;
         }
 
-        // Kategori kontrolü
-        if (!updateBook.categories || !Array.isArray(updateBook.categories) || updateBook.categories.length === 0) {
-        toast.error("At least one category must be selected!");
-        return;
-        }
-
+        console.log('Update Book State:', updatedBook);
         //publicationYear'ın formatını kontrol etmek için.
         const yearRegex = /^\d{4}$/;
+
+        console.log('Is Publication Year valid?', yearRegex.test(updatedBook.publicationYear));
         
-        if (!yearRegex.test(updateBook.publicationYear)) {
+        if (!yearRegex.test(updatedBook.publicationYear)) {
             toast.error("Publication Year must be a valid 4-digit year!");
             return;
         }
+        
 
         //Stock alanı için sayı kontrolü.
-        if (isNaN(updateBook.stock) || updateBook.stock < 0) {
+        if (isNaN(updatedBook.stock) || updatedBook.stock < 0) {
         toast.error("Stock must be a positive number!");
         return;
         }
 
-        axios.put("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/books/" + updateBook.id, updateBook)
+        console.log('Sending API request with data:', updatedBook);
+
+        axios.put(`https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books/${updateBook.id}`, updateBook)
+        
         .then(()=> {
             setUpdate(false);
             setUpdateBook({
@@ -374,6 +379,7 @@ function Books() {
                 multiple
                 onChange={handleCategoryChange} className="inputField" 
                 required>
+                    <option value="">Select an Category</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>{category.name}</option>
                     ))}
@@ -455,13 +461,15 @@ function Books() {
                 value={updateBook.categories.map((category) => category.id) || []} 
                 onChange={handleUpdateCategoryChange} className="inputField" 
                 required>
+                    <option value="">Select an Category</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>{category.name}</option>
                     ))}
                 </select>
                 <br />
 
-                <button onClick={handleUpdateBook} className="submitBtn">Update Book</button>
+                <button onClick={handleUpdateBook}
+                className="submitBtn">Update Book</button>
                 </form>
             </div>
         </div>

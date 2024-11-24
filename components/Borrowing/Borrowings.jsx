@@ -26,7 +26,7 @@ function Borrowings() {
 
     //Book listesini getirtmek için.
     useEffect(() => {
-        axios.get("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/books")
+        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books")
         .then((res) => {
             setBooks(res.data);
         })
@@ -60,7 +60,7 @@ function Borrowings() {
     //GET
     //Backendden gelen returnDate verisinin null olmaması için, borrowingDate'e göre ayarlanır.
     useEffect(() => {
-        axios.get("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/borrows")
+        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/borrows")
         .then((res) => {
             const fetchedBorrows = res.data;
 
@@ -142,7 +142,7 @@ function Borrowings() {
             return;
         }
 
-        axios.post("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/borrows", newBorrows)
+        axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/borrows", newBorrows)
         .then((res) => {
             setUpdate(false);
             setNewsBorrows({
@@ -161,7 +161,7 @@ function Borrowings() {
 
     //DELETE
     const handleDeleteBorrows = (e) => {
-        axios.delete("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/borrows/" + e.target.id)
+        axios.delete("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/borrows/" + e.target.id)
         .then((res) => {
             setUpdate(false);
             toast.success("Borrowing deleted successfully!");
@@ -219,7 +219,7 @@ function Borrowings() {
             return;
         }
 
-        axios.put("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/borrows/" + updateBorrows.id, updateBorrows)
+        axios.put("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/borrows/" + updateBorrows.id, updateBorrows)
         .then(()=> {
             console.log("Response:", response);
             setUpdate(false);
