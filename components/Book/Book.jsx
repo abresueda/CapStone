@@ -150,7 +150,16 @@ function Books() {
         return;
         }
 
-       axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books", newBook)
+        // Kategorilerin sadece ID'lerini al
+    const categoryIds = newBook.categories.map(category => category.id);
+
+    // Veriyi yeni kategori ID'leriyle güncelle
+    const newBookWithCategoryIds = {
+        ...newBook,
+        categories: categoryIds,  // sadece id'leri gönderiyoruz
+    };
+
+       axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books", newBookWithCategoryIds)
         .then((res) => {
             setUpdate(false);
             setNewBook({
