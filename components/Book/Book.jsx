@@ -131,7 +131,7 @@ function Books() {
     //ADD BOOK
     //Formdaki veriler tamamlandığında ve gönderilmek istendiğinde çalışır.
     const handleAddBook = () => {
-        if (!newBook.name || !newBook.publicationYear || !newBook.stock || !newBook.author || !newBook.publisher || !newBook.categories) {
+        if (!newBook.name || !newBook.publicationYear || !newBook.stock || !newBook.author || !newBook.publisher || !newBook.categories || newBook.categories.length === 0) {
             toast.error("All fields are required!");
             return;
         }
@@ -203,7 +203,7 @@ function Books() {
     }
 
     const handleUpdateBook=()=> {
-        if (!updateBook.name || !updateBook.publicationYear || !updateBook.stock || !updateBook.author || !updateBook.publisher || !updateBook.categories) {
+        if (!updateBook.name || !updateBook.publicationYear || !updateBook.stock || !updateBook.author || !updateBook.publisher || !updateBook.categories || updateBook.categories.length === 0) {
             toast.error("All fields are required!");
             return;
         }
