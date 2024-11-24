@@ -131,10 +131,16 @@ function Books() {
     //ADD BOOK
     //Formdaki veriler tamamlandığında ve gönderilmek istendiğinde çalışır.
     const handleAddBook = () => {
-        if (!newBook.name || !newBook.publicationYear || !newBook.stock || !newBook.author || !newBook.publisher || !newBook.categories || newBook.categories.length === 0) {
+        if (!newBook.name || !newBook.publicationYear || !newBook.stock || !newBook.author || !newBook.publisher) {
             toast.error("All fields are required!");
             return;
         }
+
+        // Kategori kontrolü
+        if (!newBook.categories || !Array.isArray(newBook.categories) || newBook.categories.length === 0) {
+        toast.error("At least one category must be selected!");
+        return;
+    }
 
         //publicationYear'ın formatını kontrol etmek için.
         const yearRegex = /^\d{4}$/;
@@ -206,6 +212,12 @@ function Books() {
         if (!updateBook.name || !updateBook.publicationYear || !updateBook.stock || !updateBook.author || !updateBook.publisher || !updateBook.categories || updateBook.categories.length === 0) {
             toast.error("All fields are required!");
             return;
+        }
+
+        // Kategori kontrolü
+        if (!updateBook.categories || !Array.isArray(updateBook.categories) || updateBook.categories.length === 0) {
+        toast.error("At least one category must be selected!");
+        return;
         }
 
         //publicationYear'ın formatını kontrol etmek için.
@@ -362,7 +374,6 @@ function Books() {
                 multiple
                 onChange={handleCategoryChange} className="inputField" 
                 required>
-                    <option value="">Select an Category</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>{category.name}</option>
                     ))}
@@ -444,7 +455,6 @@ function Books() {
                 value={updateBook.categories.map((category) => category.id) || []} 
                 onChange={handleUpdateCategoryChange} className="inputField" 
                 required>
-                    <option value="">Select an Category</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>{category.name}</option>
                     ))}
