@@ -26,7 +26,7 @@ function Borrowings() {
 
     //Book listesini getirtmek için.
     useEffect(() => {
-        axios.get("http://localhost:8080/api/v1/books")
+        axios.get("https://localhost:8080/api/v1/books")
         .then((res) => {
             setBooks(res.data);
         })
@@ -60,7 +60,7 @@ function Borrowings() {
     //GET
     //Backendden gelen returnDate verisinin null olmaması için, borrowingDate'e göre ayarlanır.
     useEffect(() => {
-        axios.get("http://localhost:8080/api/v1/borrows")
+        axios.get("https://localhost:8080/api/v1/borrows")
         .then((res) => {
             const fetchedBorrows = res.data;
 
@@ -142,7 +142,7 @@ function Borrowings() {
             return;
         }
 
-        axios.post("http://localhost:8080/api/v1/borrows", newBorrows)
+        axios.post("https://localhost:8080/api/v1/borrows", newBorrows)
         .then((res) => {
             setUpdate(false);
             setNewsBorrows({
@@ -161,7 +161,7 @@ function Borrowings() {
 
     //DELETE
     const handleDeleteBorrows = (e) => {
-        axios.delete("http://localhost:8080/api/v1/borrows/" + e.target.id)
+        axios.delete("https://localhost:8080/api/v1/borrows/" + e.target.id)
         .then((res) => {
             setUpdate(false);
             toast.success("Borrowing deleted successfully!");
@@ -219,7 +219,7 @@ function Borrowings() {
             return;
         }
 
-        axios.put("http://localhost:8080/api/v1/borrows/" + updateBorrows.id, updateBorrows)
+        axios.put("https://localhost:8080/api/v1/borrows/" + updateBorrows.id, updateBorrows)
         .then(()=> {
             console.log("Response:", response);
             setUpdate(false);
