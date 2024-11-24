@@ -23,7 +23,7 @@ function Books() {
         "stock": "",
         "author": {},
         "publisher": {},
-        "categories":[],
+        "categories": [],
     })
     const [loading, setLoading] = useState(true);
     //Author'ı getirtmek için.
@@ -88,7 +88,7 @@ function Books() {
     },[update]);
 
     const handleCategoryChange = (e) => {
-        const selectedCategoryIds = Array.from(e.target.selectedOptions, (option) => option.value);
+      const selectedCategoryIds = Array.from(e.target.selectedOptions, (option) => option.value);
     
         // Seçilen kategorilerin objelerini buluyoruz
         const selectedCategories = categories.filter((category) =>
@@ -150,16 +150,7 @@ function Books() {
         return;
         }
 
-        // Kategorilerin sadece ID'lerini al
-    const categoryIds = newBook.categories.map(category => category.id);
-
-    // Veriyi yeni kategori ID'leriyle güncelle
-    const newBookWithCategoryIds = {
-        ...newBook,
-        categories: categoryIds,  // sadece id'leri gönderiyoruz
-    };
-
-       axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books", newBookWithCategoryIds)
+       axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books", newBook)
         .then((res) => {
             setUpdate(false);
             setNewBook({
@@ -213,39 +204,32 @@ function Books() {
     }
 
     const handleUpdateBook=()=> {
-        console.log("handleUpdateBook called");
 
         // Verileri dönüştürme: publicationYear ve stock'u doğru tipe çeviriyoruz
-    const updatedBook = {
+        const updatedBook = {
         ...updateBook,
         publicationYear: parseInt(updateBook.publicationYear, 10),  // publicationYear'ı sayıya çeviriyoruz
         stock: parseInt(updateBook.stock, 10),  // stock'u sayıya çeviriyoruz
-    };
+        };
 
         if (!updatedBook.name || !updatedBook.publicationYear || !updatedBook.stock || !updatedBook.author.id || !updatedBook.publisher.id ) {
             toast.error("All fields are required!");
             return;
         }
 
-        console.log('Update Book State:', updatedBook);
-        //publicationYear'ın formatını kontrol etmek için.
+        //Publication Year kontrolü.
         const yearRegex = /^\d{4}$/;
-
-        console.log('Is Publication Year valid?', yearRegex.test(updatedBook.publicationYear));
         
         if (!yearRegex.test(updatedBook.publicationYear)) {
             toast.error("Publication Year must be a valid 4-digit year!");
             return;
         }
         
-
         //Stock alanı için sayı kontrolü.
         if (isNaN(updatedBook.stock) || updatedBook.stock < 0) {
         toast.error("Stock must be a positive number!");
         return;
         }
-
-        console.log('Sending API request with data:', updatedBook);
 
         axios.put(`https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books/${updateBook.id}`, updateBook)
         
@@ -386,8 +370,8 @@ function Books() {
                 name="category" 
                 id="category" 
                 multiple
-                onChange={handleCategoryChange} className="inputField" 
-                required>
+                value={newBook.categories.map((category) => category.id)}
+                onChange={handleCategoryChange} className="inputField" >
                     <option value="">Select an Category</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>{category.name}</option>
@@ -467,9 +451,8 @@ function Books() {
                 name="category" 
                 id="category"
                 multiple
-                value={updateBook.categories.map((category) => category.id) || []} 
-                onChange={handleUpdateCategoryChange} className="inputField" 
-                required>
+                value={updateBook.categories.map((category) => category.id)} 
+                onChange={handleUpdateCategoryChange} className="inputField" >
                     <option value="">Select an Category</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>{category.name}</option>
