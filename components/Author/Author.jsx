@@ -23,7 +23,7 @@ function Author() {
 
     //GET
     useEffect(() => {
-        axios.get("http://localhost:8080/api/v1/authors")
+        axios.get("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/authors")
         .then((res) => {
             setAuthors(res.data);
             setLoading(false);
@@ -69,7 +69,7 @@ function Author() {
             return;
         }
 
-        axios.post("http://localhost:8080/api/v1/authors", newAuthors)
+        axios.post("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/authors", newAuthors)
         .then((res)=> {
             setUpdate(false);
             setNewAuthors({
@@ -103,7 +103,7 @@ function Author() {
 
     //DELETE
     const handleDeleteAuthors=(e)=> {
-        axios.delete("http://localhost:8080/api/v1/authors/" + e.target.id)
+        axios.delete("https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/authors/" + e.target.id)
         .then((res)=> {
             setUpdate(false);
             toast.success("Author deleted succesfully!");
@@ -153,7 +153,7 @@ function Author() {
             return;
         }
 
-        axios.put(`http://localhost:8080/api/v1/authors/${updateAuthors.id}`, updateAuthors)
+        axios.put(`https://natural-kim-abresuedaozmen-a60d14d6.koyeb.app/api/v1/authors/${updateAuthors.id}`, updateAuthors)
         .then(()=> {
             setUpdate(false);
             setUpdateAuthors({
