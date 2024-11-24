@@ -23,7 +23,7 @@ function Author() {
 
     //GET
     useEffect(() => {
-        axios.get("https://localhost:8080/api/v1/authors")
+        axios.get("http://localhost:8080/api/v1/authors")
         .then((res) => {
             setAuthors(res.data);
             setLoading(false);
@@ -69,7 +69,7 @@ function Author() {
             return;
         }
 
-        axios.post("https://localhost:8080/api/v1/authors", newAuthors)
+        axios.post("http://localhost:8080/api/v1/authors", newAuthors)
         .then((res)=> {
             setUpdate(false);
             setNewAuthors({
@@ -103,7 +103,7 @@ function Author() {
 
     //DELETE
     const handleDeleteAuthors=(e)=> {
-        axios.delete("https://localhost:8080/api/v1/authors/" + e.target.id)
+        axios.delete("http://localhost:8080/api/v1/authors/" + e.target.id)
         .then((res)=> {
             setUpdate(false);
             toast.success("Author deleted succesfully!");
@@ -153,7 +153,7 @@ function Author() {
             return;
         }
 
-        axios.put(`https://localhost:8080/api/v1/authors/${updateAuthors.id}`, updateAuthors)
+        axios.put(`http://localhost:8080/api/v1/authors/${updateAuthors.id}`, updateAuthors)
         .then(()=> {
             setUpdate(false);
             setUpdateAuthors({

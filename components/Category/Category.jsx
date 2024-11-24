@@ -22,7 +22,7 @@ function Category() {
 
     //GET
     useEffect(() => {
-        axios.get("https://localhost:8080/api/v1/categories")
+        axios.get("http://localhost:8080/api/v1/categories")
         .then((res) => {
             setCategory(res.data);
             setLoading(false);
@@ -45,7 +45,7 @@ function Category() {
             return;
         }
 
-        axios.post("https://localhost:8080/api/v1/categories", newCategory)
+        axios.post("http://localhost:8080/api/v1/categories", newCategory)
         .then((res) => {
             setUpdate(false);
             setNewCategory({
@@ -80,7 +80,7 @@ function Category() {
 
     //DELETE
     const handleDeleteCategory=(e)=> {
-        axios.delete("https://localhost:8080/api/v1/categories/" + e.target.id)
+        axios.delete("http://localhost:8080/api/v1/categories/" + e.target.id)
         .then((res) =>
         {
             setUpdate(false);
@@ -103,7 +103,7 @@ function Category() {
             return;
         }
 
-        axios.put("https://localhost:8080/api/v1/categories/" + updateCategory.id, updateCategory)
+        axios.put("http://localhost:8080/api/v1/categories/" + updateCategory.id, updateCategory)
         .then(()=> {
             setUpdate(false);
             setUpdateCategory({

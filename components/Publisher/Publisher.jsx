@@ -24,7 +24,7 @@ function Publisher() {
     //GET
     useEffect(() => {
         axios
-        .get("https://localhost:8080/api/v1/publishers")
+        .get("http://localhost:8080/api/v1/publishers")
         .then((res) => {
         setPublishers(res.data);
         setLoading(false);
@@ -54,7 +54,7 @@ function Publisher() {
             return;
         }
 
-        axios.post("https://localhost:8080/api/v1/publishers", newPublishers)
+        axios.post("http://localhost:8080/api/v1/publishers", newPublishers)
         .then((res) =>
         {
             setUpdate(false);
@@ -89,7 +89,7 @@ function Publisher() {
 
     //DELETE
     const handleDeletePublishers=(e)=> {
-        axios.delete("https://localhost:8080/api/v1/publishers/" + e.target.id)
+        axios.delete("http://localhost:8080/api/v1/publishers/" + e.target.id)
         .then((res)=> 
         {
             setUpdate(false);
@@ -120,7 +120,7 @@ function Publisher() {
         }
 
         axios
-        .put("https://localhost:8080/api/v1/publishers/" + updatePublishers.id, updatePublishers)
+        .put("http://localhost:8080/api/v1/publishers/" + updatePublishers.id, updatePublishers)
         .then(()=> {
             setUpdate(false);
             setUpdatePublishers({

@@ -35,7 +35,7 @@ function Books() {
 
     //Author listesini getirmek için.
     useEffect(() => {
-        axios.get("https://localhost:8080/api/v1/authors")
+        axios.get("http://localhost:8080/api/v1/authors")
         .then((res) => {
             setAuthors(res.data);
         })
@@ -57,7 +57,7 @@ function Books() {
 
     //Publisher listesini getirmek için.
     useEffect(() => {
-        axios.get("https://localhost:8080/api/v1/publishers")
+        axios.get("http://localhost:8080/api/v1/publishers")
         .then((res) => {
             setPublishers(res.data);
         })
@@ -78,7 +78,7 @@ function Books() {
 
     //Category listesini getirmek için.
     useEffect(() => {
-        axios.get("https://localhost:8080/api/v1/categories")
+        axios.get("http://localhost:8080/api/v1/categories")
         .then((res) => {
             setCategories(res.data);
         })
@@ -103,7 +103,7 @@ function Books() {
     
     //GET
     useEffect(() => {
-        axios.get("https://localhost:8080/api/v1/books")
+        axios.get("http://localhost:8080/api/v1/books")
         .then((res) => {
             setBooks(res.data);
             setLoading(false);
@@ -150,7 +150,7 @@ function Books() {
         return;
         }
 
-       axios.post("https://localhost:8080/api/v1/books", newBook)
+       axios.post("http://localhost:8080/api/v1/books", newBook)
         .then((res) => {
             setUpdate(false);
             setNewBook({
@@ -170,7 +170,7 @@ function Books() {
 
     //DELETE
     const handleDeleteBook=(e) => {
-        axios.delete("https://localhost:8080/api/v1/books/" + e.target.id)
+        axios.delete("http://localhost:8080/api/v1/books/" + e.target.id)
         .then((res) => 
         {
             setUpdate(false);
@@ -222,7 +222,7 @@ function Books() {
         return;
         }
 
-        axios.put("https://localhost:8080/api/v1/books/" + updateBook.id, updateBook)
+        axios.put("http://localhost:8080/api/v1/books/" + updateBook.id, updateBook)
         .then(()=> {
             setUpdate(false);
             setUpdateBook({
