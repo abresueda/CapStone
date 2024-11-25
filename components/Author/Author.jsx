@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 
 function Author() {
 
+    const API_URL = "https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/authors";
     const [authors, setAuthors] = useState([]);
     const [update, setUpdate] = useState(false); //Sayfayı güncellemek için kullanıyoruz.
     const [updateAuthors, setUpdateAuthors] = useState({
@@ -23,7 +24,7 @@ function Author() {
 
     //GET
     useEffect(() => {
-        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/authors")
+        axios.get(API_URL)
         .then((res) => {
             setAuthors(res.data);
             setLoading(false);
@@ -69,7 +70,7 @@ function Author() {
             return;
         }
 
-        axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/authors", newAuthors)
+        axios.post(API_URL, newAuthors)
         .then((res)=> {
             setUpdate(false);
             setNewAuthors({
@@ -103,7 +104,7 @@ function Author() {
 
     //DELETE
     const handleDeleteAuthors=(e)=> {
-        axios.delete("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/authors/" + e.target.id)
+        axios.delete(`${API_URL}/${e.target.id}`)
         .then((res)=> {
             setUpdate(false);
             toast.success("Author deleted succesfully!");
@@ -153,7 +154,7 @@ function Author() {
             return;
         }
 
-        axios.put(`https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/authors/${updateAuthors.id}`, updateAuthors)
+        axios.put(`${API_URL}/${updateAuthors.id}`, updateAuthors)
         .then(()=> {
             setUpdate(false);
             setUpdateAuthors({
@@ -170,14 +171,6 @@ function Author() {
 
     return (
         <>
-        <nav className="navbar">
-                <Link to="/" className="href">Home</Link>
-                <Link to="/author" className="href">Authors</Link>
-                <Link to="/book" className="href">Books</Link>
-                <Link to="/borrows" className="href">Book Borrowing</Link>
-                <Link to="/categories" className="href">Book's Category</Link>
-                <Link to="/publisher" className="href">Publishers</Link>
-        </nav>
 
         <div className="authorPage">
             <h1>AUTHOR PAGE</h1>

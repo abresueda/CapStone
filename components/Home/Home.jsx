@@ -7,14 +7,6 @@ function Home() {
 
     return(
         <>
-        <nav className="navbar">
-                <Link to="/" className="href">Home</Link>
-                <Link to="/author" className="href">Authors</Link>
-                <Link to="/book" className="href">Books</Link>
-                <Link to="/borrows" className="href">Book Borrowing</Link>
-                <Link to="/categories" className="href">Book's Category</Link>
-                <Link to="/publisher" className="href">Publishers</Link>
-        </nav>
 
         <div className="header">
             

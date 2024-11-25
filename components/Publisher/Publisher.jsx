@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 
 function Publisher() {
 
+    const API_URL = "https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/publishers"
     const [publishers, setPublishers] = useState([]);
     const [update, setUpdate] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -24,7 +25,7 @@ function Publisher() {
     //GET
     useEffect(() => {
         axios
-        .get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers")
+        .get(API_URL)
         .then((res) => {
         setPublishers(res.data);
         setLoading(false);
@@ -54,7 +55,7 @@ function Publisher() {
             return;
         }
 
-        axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers", newPublishers)
+        axios.post(API_URL, newPublishers)
         .then((res) =>
         {
             setUpdate(false);
@@ -89,7 +90,7 @@ function Publisher() {
 
     //DELETE
     const handleDeletePublishers=(e)=> {
-        axios.delete("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers/" + e.target.id)
+        axios.delete(`${API_URL}/${e.target.id}`)
         .then((res)=> 
         {
             setUpdate(false);
@@ -120,7 +121,7 @@ function Publisher() {
         }
 
         axios
-        .put("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers/" + updatePublishers.id, updatePublishers)
+        .put(`${API_URL}/${updatePublishers.id}`, updatePublishers)
         .then(()=> {
             setUpdate(false);
             setUpdatePublishers({
@@ -137,14 +138,6 @@ function Publisher() {
 
     return (
         <>
-        <nav className="navbar">
-                <Link to="/" className="href">Home</Link>
-                <Link to="/author" className="href">Authors</Link>
-                <Link to="/book" className="href">Books</Link>
-                <Link to="/borrows" className="href">Book Borrowing</Link>
-                <Link to="/categories" className="href">Book's Category</Link>
-                <Link to="/publisher" className="href">Publishers</Link>
-        </nav>
 
         <div className="publisherPage">
                 <h1>PUBLISHER PAGE</h1>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import './Borrowings.css';
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from 'react-toastify';
 
 function Borrowings() {
 
+    const API_URL = "https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/borrows";
     const [borrows, setBorrows] = useState([]);
     const [update, setUpdate] = useState(false);
     const [updateBorrows, setUpdateBorrows] = useState({
@@ -26,7 +26,7 @@ function Borrowings() {
 
     //Book listesini getirtmek için.
     useEffect(() => {
-        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books")
+        axios.get("https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/books")
         .then((res) => {
             setBooks(res.data);
         })
@@ -60,7 +60,7 @@ function Borrowings() {
     //GET
     //Backendden gelen returnDate verisinin null olmaması için, borrowingDate'e göre ayarlanır.
     useEffect(() => {
-        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/borrows")
+        axios.get(API_URL)
         .then((res) => {
             const fetchedBorrows = res.data;
 
@@ -142,7 +142,7 @@ function Borrowings() {
             return;
         }
 
-        axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/borrows", newBorrows)
+        axios.post(API_URL, newBorrows)
         .then((res) => {
             setUpdate(false);
             setNewsBorrows({
@@ -161,7 +161,7 @@ function Borrowings() {
 
     //DELETE
     const handleDeleteBorrows = (e) => {
-        axios.delete("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/borrows/" + e.target.id)
+        axios.delete(`${API_URL}/${e.target.id}`)
         .then((res) => {
             setUpdate(false);
             toast.success("Borrowing deleted successfully!");
@@ -219,34 +219,24 @@ function Borrowings() {
             return;
         }
 
-        axios.put("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/borrows/" + updateBorrows.id, updateBorrows)
+        axios.put(`${API_URL}/${updateBorrows.id}`, updateBorrows)
         .then(()=> {
-            console.log("Response:", response);
             setUpdate(false);
             setUpdateBorrows({
-                "borrowerName": "",
-                "borrowingDate": "",
-                "returnDate": "",
+                borrowerName: "",
+                borrowingDate: "",
+                returnDate: "",
             });
             toast.success("Borrowing updated successfully!");
         })
         .catch((err) => {
-            console.log("Error:", err);
             toast.error("Failed to update borrowing.");
         });
     }
 
     return (
         <>
-        <nav className="navbar">
-                <Link to="/" className="href">Home</Link>
-                <Link to="/author" className="href">Authors</Link>
-                <Link to="/book" className="href">Books</Link>
-                <Link to="/borrows" className="href">Book Borrowing</Link>
-                <Link to="/categories" className="href">Book's Category</Link>
-                <Link to="/publisher" className="href">Publishers</Link>
-        </nav>
-
+        
         <div className="borrowPage">
             <h1>BOOK BORROW PAGE</h1>
             <p>Manage your book borrowings here.<br /> <strong>INFO: The standard loan period for books in this library is 15 days.</strong></p>
@@ -256,92 +246,88 @@ function Borrowings() {
             <div>
             <h1>New Borrowing</h1>
 
-            <form>
-                <input type="text"
-                placeholder="Name"
-                name="borrowerName"
-                value={newBorrows.borrowerName}
-                onChange={handleNewBorrowsChange}
-                autoComplete="off"
-                className="inputField"
-                required />
+            <input type="text"
+            placeholder="Name"
+            name="borrowerName"
+            value={newBorrows.borrowerName}
+            onChange={handleNewBorrowsChange}
+            autoComplete="off"
+            className="inputField"
+            required />
+            <br />
+
+            <input type="text"
+            placeholder="E-mail"
+            name="borrowerMail"
+            value={newBorrows.borrowerMail}
+            onChange={handleNewBorrowsChange}
+            autoComplete="off"
+            className="inputField"
+            required />
+            <br />
+
+            <input type="text"
+            placeholder="Borrowing Date"
+            name="borrowingDate"
+            value={newBorrows.borrowingDate}
+            onChange={handleNewBorrowsChange}
+            autoComplete="off"
+            className="inputField"
+            required />
+            <br />
+
+            <select 
+            name="bookForBorrowingRequest"  
+            id="bookForBorrowingRequest"
+            onChange={handleBookChange}
+            className="inputField"
+            required>
+                <option value="">Select a Book</option>
+                {books.map((book)=> (
+                <option key={book.id}
+                value={book.id}> {book.id} - {book.name}
+                </option>
+                ))}
+                </select>
                 <br />
 
-                <input type="text"
-                placeholder="E-mail"
-                name="borrowerMail"
-                value={newBorrows.borrowerMail}
-                onChange={handleNewBorrowsChange}
-                autoComplete="off"
-                className="inputField"
-                required />
-                <br />
-
-                <input type="text"
-                placeholder="Borrowing Date"
-                name="borrowingDate"
-                value={newBorrows.borrowingDate}
-                onChange={handleNewBorrowsChange}
-                autoComplete="off"
-                className="inputField"
-                required />
-                <br />
-
-                <select 
-                name="bookForBorrowingRequest"  
-                id="bookForBorrowingRequest"
-                onChange={handleBookChange}
-                className="inputField"
-                required>
-                    <option value="">Select a Book</option>
-                    {books.map((book)=> (
-                    <option key={book.id}
-                    value={book.id}> {book.id} - {book.name}
-                    </option>
-                    ))}
-                    </select>
-                    <br />
-
-                    <button onClick={handleAddBorrows} className="submitBtn">Add Borrow</button>
-            </form>
+                <button onClick={handleAddBorrows} className="submitBtn">Add Borrow</button>
             </div>
 
             <div>
             <h1>Update Borrowing</h1>
 
-            <form>
-                <input type="text"
-                placeholder="Name"
-                name="borrowerName"
-                value={updateBorrows.borrowerName}
-                onChange={handleUpdateInputChange}
-                autoComplete="off"
-                className="inputField"
-                required />
-                <br />
+            <input type="text"
+            placeholder="Name"
+            name="borrowerName"
+            value={updateBorrows.borrowerName}
+            onChange={handleUpdateInputChange}
+            autoComplete="off"
+            className="inputField"
+            required />
+            <br />
 
-                <input type="text"
-                placeholder="Borrowing Date"
-                name="borrowingDate"
-                value={updateBorrows.borrowingDate}
-                onChange={handleUpdateInputChange}
-                autoComplete="off"
-                className="inputField"
-                required />
-                <br />
+            <input type="text"
+            placeholder="Borrowing Date"
+            name="borrowingDate"
+            value={updateBorrows.borrowingDate}
+            onChange={handleUpdateInputChange}
+            autoComplete="off"
+            className="inputField"
+            required />
+            <br />
 
-                <input type="text"
-                placeholder="Return Date"
-                name="returnDate"
-                value={updateBorrows.returnDate}
-                onChange={handleUpdateInputChange}
-                autoComplete="off"
-                className="inputField"
-                />
-                <br />
+            <input type="text"
+            placeholder="Return Date"
+            name="returnDate"
+            value={updateBorrows.returnDate}
+            onChange={handleUpdateInputChange}
+            autoComplete="off"
+            className="inputField"
+            />
+            <br />
 
-                <button onClick={handleUpdateBorrow} className="submitBtn">Update Borrow</button>
-                </form>
+            <button onClick={handleUpdateBorrow} className="submitBtn">Update Borrow</button>
             </div>
         </div>
 

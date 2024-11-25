@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import './Category.css';
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -7,6 +6,7 @@ import { toast } from "react-toastify";
 
 function Category() {
 
+    const API_URL = "https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/categories";
     const [category,setCategory] = useState([]); //API'deki boş kategori listesini saklar.
     const [update, setUpdate] = useState(false); //Kategorilerde değişiklik olunca useEffect'in yeniden çalışmasını sağlar.
     const [updateCategory, setUpdateCategory] = useState({
@@ -22,7 +22,7 @@ function Category() {
 
     //GET
     useEffect(() => {
-        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/categories")
+        axios.get(API_URL)
         .then((res) => {
             setCategory(res.data);
             setLoading(false);
@@ -45,7 +45,7 @@ function Category() {
             return;
         }
 
-        axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/categories", newCategory)
+        axios.post(API_URL, newCategory)
         .then((res) => {
             setUpdate(false);
             setNewCategory({
@@ -55,6 +55,7 @@ function Category() {
             toast.success("Category added successfully!");
         }) 
         .catch((err) => {
+            console.log("Error:", err);
             toast.error("Failed to add category!");
         });
     }
@@ -80,13 +81,13 @@ function Category() {
 
     //DELETE
     const handleDeleteCategory=(e)=> {
-        axios.delete("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/categories/" + e.target.id)
-        .then((res) =>
+        axios.delete(`${API_URL}/${e.target.id}`)
+        .then(() =>
         {
             setUpdate(false);
             toast.success("Category deleted successfully!");
         })
-        .catch((err) => {
+        .catch(() => {
             toast.error("Failed to delete category.");
         });
     }
@@ -97,37 +98,41 @@ function Category() {
     }
 
     const handleUpdateCategory=()=> {
+        
+        // Eğer name ve description eski değerlerle aynıysa, yalnızca description güncellenemez diye hata mesajı verir.
+        const selectedCategory = category.find((cat) => cat.id === updateCategory.id);
+        if (
+        selectedCategory &&
+        selectedCategory.name === updateCategory.name &&
+        selectedCategory.description !== updateCategory.description
+        ) {
+        toast.error("You cannot update only the description. Please also update the name.");
+        return;
+        }
+
         //Güncelleme yaparken bütün inputların dolu olması gerekir.
         if(!updateCategory.name || !updateCategory.description) {
             toast.error("All fields are required!");
             return;
         }
 
-        axios.put("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/categories/" + updateCategory.id, updateCategory)
+        axios.put(`${API_URL}/${updateCategory.id}`, updateCategory)
         .then(()=> {
             setUpdate(false);
             setUpdateCategory({
-                id: "",
                 name: "",
                 description: ""
             })
             toast.success("Category updated successfully!");
         })
         .catch((err) => {
+            console.log("Error:", err);
             toast.error("Failed to update category.");
         });
     }
 
     return (
         <>
-        <nav className="navbar">
-                <Link to="/" className="href">Home</Link>
-                <Link to="/author" className="href">Authors</Link>
-                <Link to="/book" className="href">Books</Link>
-                <Link to="/borrows" className="href">Book Borrowing</Link>
-                <Link to="/categories" className="href">Book's Category</Link>
-                <Link to="/publisher" className="href">Publishers</Link>
-        </nav>
 
         <div className="categoryPage">
             <h1>CATEGORY PAGE</h1>
@@ -190,14 +195,15 @@ function Category() {
                 category.map((category, index) => (
                 <div key={index} className="categoryItem">
                 <p>{index + 1}. <strong>{category.name}</strong><br /> 
-({category.description})
-</p>
-<div className="categoryButtons">
-    <button onClick={handleDeleteCategory} id={category.id}>Delete</button>
-    <button onClick={()=> handleUpdateCategoryBtn(category)}>Edit
-    </button>
+                ({category.description})
+                </p>
+
+        <div className="categoryButtons">
+            <button onClick={handleDeleteCategory} id={category.id}>Delete</button>
+            <button onClick={()=> handleUpdateCategoryBtn(category)}>Edit
+            </button>
+        </div>
     </div>
-</div>
 )))}
 </div>
 </>

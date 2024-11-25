@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import './Book.css';
 import axios from "axios";
 import { toast } from 'react-toastify';
 
 function Books() {
 
+    const API_URL = "https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/books";
     const [books, setBooks] = useState([]);
     const [update, setUpdate] = useState(false);
     const [updateBook, setUpdateBook] = useState({
@@ -18,12 +18,12 @@ function Books() {
         "categories": [],
     })
     const [newBook, setNewBook] = useState({
-        "name": "",
-        "publicationYear": "",
-        "stock": "",
-        "author": {},
-        "publisher": {},
-        "categories": [],
+        name: "",
+        publicationYear: "",
+        stock: "",
+        author: {},
+        publisher: {},
+        categories: [],
     })
     const [loading, setLoading] = useState(true);
     //Author'ı getirtmek için.
@@ -32,10 +32,11 @@ function Books() {
     const [publishers, setPublishers] = useState([]);
     //Category'ı getirmek için.
     const [categories, setCategories] = useState([]);
+    const [errors, setErrors] = useState({});
 
     //Author listesini getirmek için.
     useEffect(() => {
-        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/authors")
+        axios.get("https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/authors")
         .then((res) => {
             setAuthors(res.data);
         })
@@ -57,7 +58,7 @@ function Books() {
 
     //Publisher listesini getirmek için.
     useEffect(() => {
-        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/publishers")
+        axios.get("https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/publishers")
         .then((res) => {
             setPublishers(res.data);
         })
@@ -78,7 +79,7 @@ function Books() {
 
     //Category listesini getirmek için.
     useEffect(() => {
-        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/categories")
+        axios.get("https://fashionable-bride-abresuedaozmen-64f5d7ec.koyeb.app/api/v1/categories")
         .then((res) => {
             setCategories(res.data);
         })
@@ -95,15 +96,19 @@ function Books() {
             selectedCategoryIds.includes(String(category.id))
         );
 
-        setNewBook((prevState) => ({
-            ...prevState,
-            categories: selectedCategories, // Kategori objelerini ekliyoruz
-        }));
+        setNewBook((prevState) => {
+            const updatedBook = {
+                ...prevState,
+                categories: selectedCategories, // Kategori objelerini ekliyoruz
+            };
+            console.log("Updated categories:", updatedBook.categories); // Debug log
+            return updatedBook;
+        });
     };
     
     //GET
     useEffect(() => {
-        axios.get("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books")
+        axios.get(API_URL)
         .then((res) => {
             setBooks(res.data);
             setLoading(false);
@@ -122,45 +127,68 @@ function Books() {
     //Kullanıcı forma yeni kitap eklerse, state'e eklenir.
     const handleNewBookChange =(e) => {
         const {name,value} = e.target;
-        setNewBook((prev) =>({
-            ...prev,
-            [name]:value,
-        }))
+        setNewBook((prevBook) => ({ 
+            ...prevBook, 
+            [name]: value,
+        }));
     }
+
+    const validateBook = (book) => {
+        const errors = {};
+        
+        // Book name kontrolü
+        if (!book.name) {
+        errors.name = "Book name is required!";
+        } else if (!book.publicationYear || isNaN(Number(book.publicationYear)) || book.publicationYear.length !== 4) {
+        // Publication Year kontrolü
+        errors.publicationYear = "Publication Year must be a valid 4-digit year!";
+        } else if (!book.stock || isNaN(book.stock) || book.stock < 0) {
+        // Stock kontrolü
+        errors.stock = "Stock must be a positive number!";
+        } else if (!book.author.id) {
+        // Author kontrolü
+        errors.author = "An author must be selected!";
+        } else if (!book.publisher.id) {
+        // Publisher kontrolü
+        errors.publisher = "A publisher must be selected!";
+        } else if (!book.categories || book.categories.length === 0) {
+        // Category kontrolü
+        errors.categories = "At least one category must be selected!";
+        }
+
+        setErrors(errors); // Hataları state'e kaydet
+
+        return errors;
+    };
 
     //ADD BOOK
     //Formdaki veriler tamamlandığında ve gönderilmek istendiğinde çalışır.
     const handleAddBook = () => {
-        if (!newBook.name || !newBook.publicationYear || !newBook.stock || !newBook.author.id || !newBook.publisher.id) {
-            toast.error("All fields are required!");
-            return;
-        }
 
-        //publicationYear'ın formatını kontrol etmek için.
-        const yearRegex = /^\d{4}$/;
-        
-        if (!yearRegex.test(newBook.publicationYear)) {
-            toast.error("Publication Year must be a valid 4-digit year!");
-            return;
-        }
+        const validationErrors = validateBook(newBook);
 
-        //Stock alanı için sayı kontrolü.
-        if (isNaN(newBook.stock) || newBook.stock < 0) {
-        toast.error("Stock must be a positive number!");
+        // Eğer hata varsa, her bir hata için toast mesajları göster.
+        if (Object.keys(validationErrors).length > 0) {
+        // Hataları her bir alan için toast.error ile göster
+        Object.keys(validationErrors).forEach((key) => {
+            toast.error(validationErrors[key]);  // Hata mesajını göster
+        });
         return;
         }
-
-       axios.post("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books", newBook)
+    
+       axios.post(API_URL, newBook)
         .then((res) => {
+            setBooks((prevBooks) => [...prevBooks, res.data]);
             setUpdate(false);
+            
             setNewBook({
-                "name": "",
-                "publicationYear": "",
-                "stock": "",
-                "author": {},
-                "publisher": {},
-                "categories": [],
-            })
+                name: "",
+                publicationYear: "",
+                stock: "",
+                author: {},
+                publisher: {},
+                categories: [],
+            }); 
             toast.success("Book added successfully!");
         })
         .catch((err) => {
@@ -170,8 +198,8 @@ function Books() {
 
     //DELETE
     const handleDeleteBook=(e) => {
-        axios.delete("https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books/" + e.target.id)
-        .then((res) => 
+        axios.delete(`${API_URL}/${e.target.id}`)
+        .then(() => 
         {
             setUpdate(false);
             toast.success("Book deleted successfully!");
@@ -205,35 +233,20 @@ function Books() {
 
     const handleUpdateBook=()=> {
 
-        // Verileri dönüştürme: publicationYear ve stock'u doğru tipe çeviriyoruz
-        const updatedBook = {
-        ...updateBook,
-        publicationYear: parseInt(updateBook.publicationYear, 10),  // publicationYear'ı sayıya çeviriyoruz
-        stock: parseInt(updateBook.stock, 10),  // stock'u sayıya çeviriyoruz
-        };
+        const validationErrors = validateBook(updateBook);
 
-        if (!updatedBook.name || !updatedBook.publicationYear || !updatedBook.stock || !updatedBook.author.id || !updatedBook.publisher.id ) {
-            toast.error("All fields are required!");
-            return;
-        }
-
-        //Publication Year kontrolü.
-        const yearRegex = /^\d{4}$/;
-        
-        if (!yearRegex.test(updatedBook.publicationYear)) {
-            toast.error("Publication Year must be a valid 4-digit year!");
-            return;
-        }
-        
-        //Stock alanı için sayı kontrolü.
-        if (isNaN(updatedBook.stock) || updatedBook.stock < 0) {
-        toast.error("Stock must be a positive number!");
+        // Eğer hata varsa, her bir hata için toast mesajları göster.
+        if (Object.keys(validationErrors).length > 0) {
+        // Hataları her bir alan için toast.error ile göster
+        Object.keys(validationErrors).forEach((key) => {
+            toast.error(validationErrors[key]);  // Hata mesajını göster
+        });
         return;
         }
 
-        axios.put(`https://direct-raquel-abresuedaozmen-b584b910.koyeb.app/api/v1/books/${updateBook.id}`, updateBook)
-        
-        .then(()=> {
+        axios.put(`${API_URL}/${updateBook.id}`, updateBook)
+        .then((res)=> {
+            setBooks((prevBooks) => [...prevBooks, res.data]);
             setUpdate(false);
             setUpdateBook({
                 "name": "",
@@ -290,14 +303,6 @@ function Books() {
 
     return(
         <>
-        <nav className="navbar">
-                <Link to="/" className="href">Home</Link>
-                <Link to="/author" className="href">Authors</Link>
-                <Link to="/book" className="href">Books</Link>
-                <Link to="/borrows" className="href">Book Borrowing</Link>
-                <Link to="/categories" className="href">Book's Category</Link>
-                <Link to="/publisher" className="href">Publishers</Link>
-        </nav>
 
         <div className="bookPage">
             <h1>BOOK'S PAGE</h1>
@@ -308,7 +313,6 @@ function Books() {
             <div>
                 <h1>New Book</h1>
 
-                <form>
                 <input type="text"
                 placeholder="Name"
                 name="name"
@@ -380,13 +384,12 @@ function Books() {
                 <br />
 
                 <button onClick={handleAddBook} className="submitBtn">Add Book</button>
-                </form>
+               
             </div>
 
             <div>
                 <h1>Update Book</h1>
 
-                <form>
                 <input type="text"
                 placeholder="Name"
                 name="name"
@@ -452,7 +455,8 @@ function Books() {
                 id="category"
                 multiple
                 value={updateBook.categories.map((category) => category.id)} 
-                onChange={handleUpdateCategoryChange} className="inputField" >
+                onChange={handleUpdateCategoryChange} className="inputField" 
+                required>
                     <option value="">Select an Category</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>{category.name}</option>
@@ -462,7 +466,6 @@ function Books() {
 
                 <button onClick={handleUpdateBook}
                 className="submitBtn">Update Book</button>
-                </form>
             </div>
         </div>
 

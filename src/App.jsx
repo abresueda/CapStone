@@ -9,6 +9,7 @@ import Publisher from '../components/Publisher/Publisher';
 import Category from '../components/Category/Category';
 import Book from '../components/Book/Book';
 import Borrows from '../components/Borrowing/Borrowings';
+import { Link } from 'react-router-dom';
 
 
 function App() {
@@ -24,6 +25,15 @@ function App() {
         pauseOnHover 
         draggable 
       />
+      <nav className="navbar">
+                <Link to="/" className="nav-link">Home</Link>
+                <Link to="/author" className="nav-link">Authors</Link>
+                <Link to="/book" className="nav-link">Books</Link>
+                <Link to="/borrows" className="nav-link">Book Borrowing</Link>
+                <Link to="/categories" className="nav-link">Book's Category</Link>
+                <Link to="/publisher" className="nav-link">Publishers</Link>
+            </nav>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/author" element={<Author />} />
