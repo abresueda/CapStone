@@ -233,34 +233,56 @@ function Books() {
 
     const handleUpdateBook=()=> {
 
-        const validationErrors = validateBook(updateBook);
+        // Verileri dönüştürme: publicationYear ve stock'u doğru tipe çeviriyoruz
+        const updatedBook = {
+            ...updateBook,
+            publicationYear: parseInt(updateBook.publicationYear, 10),  // publicationYear'ı sayıya çeviriyoruz
+            stock: parseInt(updateBook.stock, 10),  // stock'u sayıya çeviriyoruz
+        };
 
-        // Eğer hata varsa, her bir hata için toast mesajları göster.
-        if (Object.keys(validationErrors).length > 0) {
-        // Hataları her bir alan için toast.error ile göster
-        Object.keys(validationErrors).forEach((key) => {
-            toast.error(validationErrors[key]);  // Hata mesajını göster
-        });
-        return;
+        // Boş alanları kontrol etme
+        if (!updatedBook.name || !updatedBook.author.id || !updatedBook.publisher.id) {
+            toast.error("All fields are required!");
+            return;
+        } else {
+            // publicationYear'ın formatını kontrol etme
+            const yearRegex = /^\d{4}$/;
+            if (!yearRegex.test(updatedBook.publicationYear)) {
+               toast.error("Publication Year must be a valid 4-digit year!");
+               return;
+          } else {
+            // Stock alanı için sayı kontrolü
+            if (isNaN(updatedBook.stock) || updatedBook.stock < 0) {
+                toast.error("Stock must be a positive number!");
+                return;
+            } else {
+                // Categories kontrolü
+                if (!updatedBook.categories || updatedBook.categories.length === 0) {
+                    toast.error("At least one category must be selected!");
+                    return;
+                } else {
+                    // Eğer tüm kontroller geçerliyse, API çağrısı yapılabilir
+                    axios.put(`${API_URL}/${updatedBook.id}`, updatedBook)
+                        .then((res) => {
+                            setBooks((prevBooks) => prevBooks.map((book) => (book.id === res.data.id ? res.data : book)));
+                            setUpdate(false);
+                            setUpdateBook({
+                                name: "",
+                                publicationYear: "",
+                                stock: "",
+                                author: {},
+                                publisher: {},
+                                categories: [],
+                            });
+                            toast.success("Book updated successfully!");
+                        })
+                        .catch(() => {
+                            toast.error("Failed to update book.");
+                        });
+                }
+            }
         }
-
-        axios.put(`${API_URL}/${updateBook.id}`, updateBook)
-        .then((res)=> {
-            setBooks((prevBooks) => [ ...prevBooks, res.data]);
-            setUpdate(false);
-            setUpdateBook({
-                "name": "",
-                "publicationYear": "",
-                "stock": "",
-                "author": {},
-                "publisher": {},
-                "categories": [],
-            })
-            toast.success("Book updated successfully!");
-        })
-        .catch((err) => {
-            toast.error("Failed to update book.");
-        });
+    }
     }
 
     //Author Update yapabilmek için.
@@ -303,7 +325,6 @@ function Books() {
 
     return(
         <>
-
         <div className="bookPage">
             <h1>BOOK'S PAGE</h1>
             <p>Manage your books here.</p>
