@@ -82,4 +82,4 @@ The Library Application is a **Single Page Application (SPA)** built with React,
 2. Update the API endpoints in src/api if necessary.
 
 ### Live Deployment
-The project is live and can be accessed at:  https://cap-stone-6pauzefcu-abre-sueda-ozmens-projects.vercel.app
+The project is live and can be accessed at:  https://cap-stone-zeta.vercel.app 
