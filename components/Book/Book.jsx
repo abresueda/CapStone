@@ -191,7 +191,7 @@ function Books() {
             }); 
             toast.success("Book added successfully!");
         })
-        .catch((err) => {
+        .catch(() => {
             toast.error("Failed to add book!");
         });
     }
@@ -246,7 +246,7 @@ function Books() {
 
         axios.put(`${API_URL}/${updateBook.id}`, updateBook)
         .then((res)=> {
-            setBooks((prevBooks) => [...prevBooks, res.data]);
+            setBooks((prevBooks) => [ ...prevBooks, res.data]);
             setUpdate(false);
             setUpdateBook({
                 "name": "",
@@ -348,6 +348,7 @@ function Books() {
                 <select 
                 name="author" 
                 id="author"
+                value={newBook.author?.id || ""}
                 onChange={handleAuthorChange}
                 className="inputField"
                 required>
@@ -361,6 +362,7 @@ function Books() {
                 <select 
                 name="publisher" 
                 id="publisher" 
+                value={newBook.publisher?.id || ""}
                 onChange={handlePublisherChange} className="inputField"
                 required>
                     <option value="">Select an Publisher</option>
@@ -404,7 +406,7 @@ function Books() {
                 <input type="text"
                 placeholder="Publication Year"
                 name="publicationYear"
-                value={updateBook.publicationYear}
+                value={updateBook.publicationYear || ""}
                 onChange={handleUpdateInputChange}
                 autoComplete="off"
                 className="inputField"

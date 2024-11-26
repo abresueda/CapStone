@@ -236,7 +236,6 @@ function Borrowings() {
 
     return (
         <>
-        
         <div className="borrowPage">
             <h1>BOOK BORROW PAGE</h1>
             <p>Manage your book borrowings here.<br /> <strong>INFO: The standard loan period for books in this library is 15 days.</strong></p>
@@ -324,6 +323,8 @@ function Borrowings() {
             onChange={handleUpdateInputChange}
             autoComplete="off"
             className="inputField"
+            readOnly
+            onClick={() => toast.error("You cannot edit the Return Date. Return Date is set according to the borrowing date.")}
             />
             <br />
 

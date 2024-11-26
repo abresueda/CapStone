@@ -107,6 +107,21 @@ function Publisher() {
     }
 
     const handleUpdatePublishers=()=> {
+
+        // Eğer sadece 'address' değeri değişmişse, hata mesajı göster.
+    
+        const selectedPublisher = publishers.find((pub) => pub.id === updatePublishers.id);
+        if (
+        selectedPublisher &&
+        selectedPublisher.name === updatePublishers.name &&
+        selectedPublisher.establishmentYear === updatePublishers.establishmentYear &&
+        selectedPublisher.address !== updatePublishers.address
+        ) {
+        toast.error("You cannot update only the address. Please also update the name or establishment year.");
+        return;
+        }
+        
+        //Güncelleme yaparken bütün inputların dolu olması gerekir.
         if (!updatePublishers.name || !updatePublishers.establishmentYear || !updatePublishers.address) {
             toast.error("All fields are required!");
             return;
